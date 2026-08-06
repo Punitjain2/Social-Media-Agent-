@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  social-media-agent:
+    build: .
+    container_name: social-media-agent
+    ports:
+      - "5000:5000"
+    env_file:
+      - .env
+    environment:
+      - FLASK_ENV=production
+      - PORT=5000
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    volumes:
+      - ./backend/templates:/app/templates:ro
+      - ./backend/static:/app/static:ro
